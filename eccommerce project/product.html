@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>commerce  website project</title>
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+</head>
+<body>
+    <section id="header" data-aos="fade-up">
+        <a href="#"><img src="banners/logo.jpeg" class="logo" alt=""></a>
+        <div>
+            <ul id="navbar">
+                <li><a href= "index.html" class="nav-link">Home</a>
+                <li><a href="shop.html" class="nav-link">Shop</a>
+                <!--<section id="feature"><a href=""></a></section>-->
+                <li><a href="blog.html" class="nav-link">Blog</a>
+                <li><a href="about.html" class="nav-link">About</a>
+                <li><a href="contact.html" class="nav-link">Contact</a>
+                <li><a href="cart.html" class="nav-link"><i class="far fa-shopping-bag"></i></a>
+
+                </li>
+            </ul>
+            <div class="hamburger">
+                 <span class="bar"></span>
+                 <span class="bar"></span>
+                 <span class="bar"></span>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Close button for mobile menu -->
+    <button class="close-menu">
+        <i class="fas fa-times"></i>
+    </button>
+
+    <!-- start of products details section-->
+     <section id="prodetails" class="section-p1" data-aos="fade-up">
+       <div class="single-pic">
+        <div class="main-img-group">
+          <img src="banners/trousers.avif" width="50%" id="Mainpic" alt="Main Product Image">
+          <div class="small-img-group">
+            <div class="small-img-col">
+              <img src="banners/trousers.avif" width="100%" class="small-img" alt="Trousers 1">
+            </div>
+            <div class="small-img-col">
+              <img src="banners/back fit.jpeg" width="100%" class="small-img" alt="Trousers 2">
+            </div>
+            <div class="small-img-col">
+              <img src="banners/back fitting.avif" width="100%" class="small-img" alt="Trousers 3">
+            </div>
+            <div class="small-img-col">
+              <img src="banners/trouser image.jpeg" width="100%" class="small-img" alt="Trousers 4">
+            </div>
+          </div>
+        </div>
+        <div class="single-pro-details center-details">
+          <h6>Home / Trousers</h6>
+          <h4>Men's Premium Trousers</h4>
+          <h2>$400.00</h2>
+          <p>
+            Experience comfort and style with our premium men's trousers. Perfect for both casual and formal occasions, these trousers are crafted from high-quality materials for durability and a perfect fit.
+          </p>
+          <ul class="features">
+            <li>Material: 100% Cotton, Breathable</li>
+            <li>Fit: Regular, Slim, Relaxed</li>
+            <li>Available Sizes: S, M, L, XL</li>
+            <li>Colors: Black, Navy, Grey</li>
+            <li>Origin: Made in Kenya</li>
+            <li>Warranty: 1 Year</li>
+          </ul>
+          <label for="size">Size:</label>
+          <select id="size" name="size">
+            <option value="S">Small</option>
+            <option value="M">Medium</option>
+            <option value="L">Large</option>
+            <option value="XL">X-Large</option>
+          </select>
+          <br>
+          <label for="color">Color:</label><div class="four">
+              
+              <h6><button class="order-btn" data-product="T-Shirts" data-price="660">Order</button>Price $660</h6>
+              </div>
+          <input type="number" id="quantity" name="quantity" value="1" min="1" max="10">
+          <br>
+          <button type="button">Add to Cart</button>
+          <ul class="care-instructions">
+            <li>Care: Machine wash cold</li>
+            <li>Do not bleach</li>
+            <li>Iron on low heat</li>
+          </ul>
+          <div class="reviews">
+            <h5>Customer Reviews</h5>
+            <p>⭐⭐⭐⭐☆ (4/5)</p>
+            <p>"Very comfortable and stylish!" - John D.</p>
+            <p>"Great fit and quality material." - Mary K.</p>
+          </div>
+          
+          <div class="qna-section">
+            <h5>Q & A</h5>
+            <div class="qna-item">
+              <button class="qna-question">Is this product true to size?</button>
+              <div class="qna-answer">Yes, we recommend ordering your usual size for the best fit.</div>
+            </div>
+            <div class="qna-item">
+              <button class="qna-question">Can I return the product if it doesn't fit?</button>
+              <div class="qna-answer">Absolutely! We offer a 30-day return policy for all products.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+     <section id="feature" class="section-p1" data-aos="fade-up">
+      <h2>Our Products</h2>
+      <div class="fe-box">
+          <div class="one">
+          <img src="banners/premium_photo-banner 2.avif" alt="">
+          <h6>Pull-Overs and Pull -Neck Clothing</h6>
+          <h6><button class="order-btn" data-product="Pull-Overs and Pull -Neck Clothing" data-price="60">Order</button>Price $60</h6>
+         </div>
+          
+       
+              <div class="two">
+              <img src="banners/photo-1650100178700-banner 6.avif" alt="">
+              <h6>T-Shirts</h6>
+              <h6><button class="order-btn" data-product="T-Shirts" data-price="660">Order</button>Price $660</h6>
+              </div>
+              <div class="three">
+               <img src="banners/blog images/premium_photo-blog 1.avif" alt="">
+              <h6>Ladies Tops and Jackets</h6>
+              <h6><button class="order-btn" data-product="Ladies Tops and Jackets" data-price="700">Order</button>Price $700</h6>
+            </div>
+            <div class="four">
+              <img src="banners/photo-1650100178700-banner 6.avif" alt="">
+              <h6>T-Shirts</h6>
+              <h6><button class="order-btn" data-product="T-Shirts" data-price="660">Order</button>Price $660</h6>
+              </div>
+              <div class="five">
+                <img src="banners/photo-1650100178700-banner 6.avif" alt="">
+                <h6>T-Shirts</h6>
+                <h6><button class="order-btn" data-product="T-Shirts" data-price="660">Order</button>Price $660</h6>
+                </div>
+                <div class="six">
+                  <img src="banners/photo-1650100178700-banner 6.avif" alt="">
+                  <h6>T-Shirts</h6>
+                  <h6><button class="order-btn" data-product="T-Shirts" data-price="660">Order</button>Price $660</h6>
+                  </div>
+        </section>
+   
+    
+        
+          
+      <!-- Modern Contact Section Start -->
+      <section class="contact-modern-section section-p1" style="background: #f5f7fa; border-radius: 18px; margin-top: 40px; margin-bottom: 0; box-shadow: 0 4px 16px rgba(13,180,172,0.08);" data-aos="fade-up">
+        <div style="display: flex; flex-wrap: wrap; gap: 40px; justify-content: center; align-items: flex-start; padding: 40px 0 0 0;">
+          <div style="flex: 2; min-width: 260px; background: #fff; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); padding: 32px 24px; margin-bottom: 40px;">
+            <h2 style="color: #0db4ac; margin-bottom: 18px;">Send Us a Message</h2>
+            <form action="#" style="display: flex; flex-direction: column; gap: 18px;">
+              <input type="text" placeholder="Your Name" required style="padding: 14px; border: 1px solid #cccccc; border-radius: 6px; background: #f5f7fa;">
+              <input type="email" placeholder="Your Email" required style="padding: 14px; border: 1px solid #cccccc; border-radius: 6px; background: #f5f7fa;">
+              <textarea rows="5" placeholder="Your Message" required style="padding: 14px; border: 1px solid #cccccc; border-radius: 6px; background: #f5f7fa;"></textarea>
+              <button type="submit" style="padding: 14px; border: none; background-color: #0db4ac; color: white; font-size: 1rem; border-radius: 6px; cursor: pointer; font-weight: bold; transition: background 0.3s;">Send Message</button>
+            </form>
+          </div>
+          <div style="flex: 1; min-width: 220px; background: #fff; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); padding: 32px 24px; margin-bottom: 40px;">
+            <h3 style="color: #0db4ac; margin-bottom: 18px;">Contact Information</h3>
+            <p style="color: #333; margin-bottom: 12px; font-size: 16px;"><i class="fas fa-map-marker-alt"></i> Nairobi, Kenya</p>
+            <p style="color: #333; margin-bottom: 12px; font-size: 16px;"><i class="fas fa-phone"></i> +254-708-661-872</p>
+            <p style="color: #333; margin-bottom: 12px; font-size: 16px;"><i class="fas fa-envelope"></i> kamaiglen4@gmail.com</p>
+            <div class="social-icons" style="margin-top: 18px; display: flex; gap: 18px;">
+              <a href="https://www.facebook.com/profile.php?id=100084906404154" target="_blank" style="font-size: 22px; color: #0db4ac;"><i class="fab fa-facebook-f"></i></a>
+              <a href="https://x.com/Glennykamai?t=NCNq0hPuHuy38RDBtvrLZw&s=09" target="_blank" style="font-size: 22px; color: #0db4ac;"><i class="fab fa-twitter"></i></a>
+      <section class="contact-section" class="section-p1">
+        <div class="contact-container">
+          <h2>Contact Us</h2>
+          <h4>Feel free to reach out to us through the form or our contact details below</h4>
+          <div class="contact-content">
+            <!-- form creation to takethe input of clients-->
+             <form action="contact-form">
+              <input type="text" placeholder="Your Name" required>
+              <input type="email" placeholder="Your Email" required>
+              <input type="text" placeholder="Subject" required>
+              <textarea rows="5" placeholder="Your Message" required></textarea>
+              <button type="submit">Send Message</button>
+             </form>
+
+             <!-- contact info-->
+              <div class="contact-info">
+              <p><i class="fas fa-map-marker-alt"></i>Nairobi, Kenya</p>
+              <p><i class="fas fa-phone"></i>+ 254-708-661-872</p>
+              <p><i class="fas fa-envelope"></i>kamaiglen4@gmail.com</p>
+              <div class="social-icons">
+              <a href="https://www.facebook.com/profile.php?id=100084906404154"><i class="fab fa-facebook-f"></i></a>
+              <a href="https://x.com/Glennykamai?t=NCNq0hPuHuy38RDBtvrLZw&s=09"><i class="fab fa-twitter"></i></a>
+              <a href="https://www.instagram.com/glennykemboi?igsh=YzljYTk1ODg3Zg=="><i class="fab fa-instagram"></i></a>
+              <a href="#"><i class="fab fa-whatsapp"></i></a>
+
+              </div>
+              </div>
+
+          </div>
+        </div>
+       
+
+        </div>
+
+      </section>  
+<script src="script.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+<script>AOS.init({ duration: 900, once: true });</script>
+</body>
+</html>

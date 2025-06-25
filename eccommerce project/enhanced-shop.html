@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop - Creative Ecommerce</title>
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+    <style>
+        /* Enhanced Shop Styles */
+        .shop-header {
+            background: linear-gradient(135deg, #0db4ac 0%, #13ac13 100%);
+            color: white;
+            text-align: center;
+            padding: 60px 20px;
+            margin-bottom: 40px;
+        }
+
+        .shop-header h2 {
+            font-size: 42px;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .shop-header p {
+            font-size: 18px;
+            opacity: 0.9;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 32px rgba(0,0,0,0.15);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .product-card:hover .product-image {
+            transform: scale(1.05);
+        }
+
+        .product-info {
+            padding: 20px;
+        }
+
+        .product-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .product-price {
+            font-size: 20px;
+            color: #0db4ac;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .product-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .view-details-btn {
+            background: #f8f9fa;
+            color: #333;
+            border: 1px solid #ddd;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .view-details-btn:hover {
+            background: #0db4ac;
+            color: white;
+            border-color: #0db4ac;
+        }
+
+        .add-to-cart-btn {
+            background: #0db4ac;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s ease;
+        }
+
+        .add-to-cart-btn:hover {
+            background: #13ac13;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 10000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 0;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 1000px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .close {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 10001;
+            background: white;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .close:hover {
+            color: #0db4ac;
+        }
+
+        .product-detail-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            padding: 40px;
+        }
+
+        .product-images {
+            position: relative;
+        }
+
+        .main-image {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .thumbnail-images {
+            display: flex;
+            gap: 10px;
+        }
+
+        .thumbnail {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: border-color 0.3s ease;
+        }
+
+        .thumbnail.active {
+            border-color: #0db4ac;
+        }
+
+        .product-details h2 {
+            font-size: 28px;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .product-details .price {
+            font-size: 24px;
+            color: #0db4ac;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .product-details .description {
+            color: #6c757d;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .product-options {
+            margin-bottom: 20px;
+        }
+
+        .option-group {
+            margin-bottom: 15px;
+        }
+
+        .option-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .option-group select,
+        .option-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .quantity-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .quantity-btn {
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            width: 35px;
+            height: 35px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .quantity-input {
+            width: 60px;
+            text-align: center;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 8px;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .add-to-cart-modal {
+            background: #0db4ac;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s ease;
+        }
+
+        .add-to-cart-modal:hover {
+            background: #13ac13;
+        }
+
+        .buy-now {
+            background: #333;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s ease;
+        }
+
+        .buy-now:hover {
+            background: #555;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #0db4ac;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            z-index: 10000;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .product-detail-content {
+                grid-template-columns: 1fr;
+                gap: 20px;
+                padding: 20px;
+            }
+
+            .modal-content {
+                margin: 10% auto;
+                width: 95%;
+            }
+
+            .product-actions {
+                flex-direction: column;
+            }
+
+            .modal-actions {
+                flex-direction: column;
+            }
+        }
+
+        /* Filter and Search Section */
+        .shop-controls {
+            max-width: 1200px;
+            margin: 0 auto 40px;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 10px 15px;
+            flex: 1;
+            max-width: 300px;
+        }
+
+        .search-box input {
+            border: none;
+            outline: none;
+            flex: 1;
+            margin-left: 10px;
+        }
+
+        .filter-dropdown {
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+        }
+
+        /* Footwear Collection Styles */
+        .footwear-section {
+            margin: 60px 0;
+            padding: 0 20px;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 32px;
+            color: #333;
+            margin-bottom: 40px;
+            font-weight: 700;
+        }
+
+        .footwear-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footwear-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            height: 400px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .footwear-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 32px rgba(0,0,0,0.15);
+        }
+
+        .footwear-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .footwear-card:hover .footwear-image {
+            transform: scale(1.05);
+        }
+
+        .footwear-info {
+            padding: 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .footwear-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+
+        .footwear-price {
+            font-size: 18px;
+            color: #0db4ac;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .footwear-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .footwear-view-btn {
+            background: #f8f9fa;
+            color: #333;
+            border: 1px solid #ddd;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s ease;
+            flex: 1;
+        }
+
+        .footwear-view-btn:hover {
+            background: #0db4ac;
+            color: white;
+            border-color: #0db4ac;
+        }
+
+        .footwear-cart-btn {
+            background: #0db4ac;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: background 0.3s ease;
+            flex: 1;
+        }
+
+        .footwear-cart-btn:hover {
+            background: #13ac13;
+        }
+
+        /* Responsive Design for Footwear */
+        @media (max-width: 768px) {
+            .footwear-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .footwear-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <section id="header" data-aos="fade-up">
+        <a href="#"><img src="banners/logo.jpeg" class="logo" alt=""></a>
+        <div>
+            <ul id="navbar">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="shop.html" class="nav-link active">Shop</a></li>
+                <li><a href="blog.html" class="nav-link">Blog</a></li>
+                <li><a href="about.html" class="nav-link">About</a></li>
+                <li><a href="contact.html" class="nav-link">Contact</a></li>
+                <li><a href="cart.html" class="nav-link"><i class="far fa-shopping-bag"></i><span class="cart-count">0</span></a></li>
+            </ul>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Close button for mobile menu -->
+    <button class="close-menu">
+        <i class="fas fa-times"></i>
+    </button>
+
+    <!-- Shop Header -->
+    <section class="shop-header" data-aos="fade-up">
+        <h2>Our Shop</h2>
+        <p>Discover our collection of premium fashion items</p>
+    </section>
+
+    <!-- Shop Controls -->
+    <div class="shop-controls" data-aos="fade-up">
+        <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="Search products..." id="searchInput">
+        </div>
+        <select class="filter-dropdown" id="categoryFilter">
+            <option value="">All Categories</option>
+            <option value="clothing">Clothing</option>
+            <option value="shoes">Shoes</option>
+            <option value="accessories">Accessories</option>
+        </select>
+        <select class="filter-dropdown" id="priceFilter">
+            <option value="">All Prices</option>
+            <option value="0-100">$0 - $100</option>
+            <option value="100-500">$100 - $500</option>
+            <option value="500+">$500+</option>
+        </select>
+    </div>
+
+    <!-- Products Grid -->
+    <section class="section-p1" data-aos="fade-up">
+        <div class="product-grid" id="productGrid">
+            <!-- Products will be dynamically populated -->
+        </div>
+    </section>
+
+    <!-- Footwear Collection Section -->
+    <section class="footwear-section" data-aos="fade-up">
+        <h2 class="section-title">Footwear Collection</h2>
+        <div class="footwear-grid" id="footwearGrid">
+            <!-- Footwear products will be dynamically populated -->
+        </div>
+    </section>
+
+    <!-- Product Detail Modal -->
+    <div id="productModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeProductModal()">&times;</span>
+            <div class="product-detail-content" id="modalContent">
+                <!-- Modal content will be dynamically populated -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Pagination -->
+    <section id="pagination" class="section-p1" style="text-align: center;">
+        <a href="#" class="active">1</a>
+        <a href="#">2</a>
+        <a href="#">3</a>
+        <a href="#"><i class="fal fa-long-arrow-alt-right"></i></a>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer" style="background: #0db4ac; color: #fff; text-align: center; padding: 18px 0 10px 0; font-size: 16px; margin-top: 50px;">
+        &copy; <span id="year"></span> Creative Ecommerce. All rights reserved.
+    </footer>
+
+    <script>
+        // Product data
+        const products = [
+            {
+                id: 1,
+                name: "Pull-Overs and Pull-Neck Clothing",
+                price: 60,
+                image: "banners/premium_photo-banner 2.avif",
+                category: "clothing",
+                description: "Comfortable and stylish pull-over clothing perfect for casual wear.",
+                images: [
+                    "banners/premium_photo-banner 2.avif",
+                    "banners/photo-1650100178700-banner 6.avif",
+                    "banners/blog images/premium_photo-blog 1.avif"
+                ],
+                sizes: ["S", "M", "L", "XL"],
+                colors: ["Black", "White", "Blue"]
+            },
+            {
+                id: 2,
+                name: "T-Shirts",
+                price: 660,
+                image: "banners/photo-1650100178700-banner 6.avif",
+                category: "clothing",
+                description: "Premium quality t-shirts with modern designs and comfortable fit.",
+                images: [
+                    "banners/photo-1650100178700-banner 6.avif",
+                    "banners/premium_photo-banner 2.avif"
+                ],
+                sizes: ["S", "M", "L", "XL"],
+                colors: ["Black", "White", "Red", "Blue"]
+            },
+            {
+                id: 3,
+                name: "Ladies Tops and Jackets",
+                price: 700,
+                image: "banners/blog images/premium_photo-blog 1.avif",
+                category: "clothing",
+                description: "Elegant ladies tops and jackets for every occasion.",
+                images: [
+                    "banners/blog images/premium_photo-blog 1.avif",
+                    "banners/premium_photo-banner 2.avif"
+                ],
+                sizes: ["XS", "S", "M", "L", "XL"],
+                colors: ["Black", "White", "Pink", "Purple"]
+            }
+        ];
+
+        // Footwear products data
+        const footwearProducts = [
+            {
+                id: 101,
+                name: "Premium Sneakers",
+                price: 120,
+                image: "banners/shoe 1.avif",
+                category: "shoes",
+                description: "Comfortable and stylish sneakers for daily wear.",
+                images: [
+                    "banners/shoe 1.avif",
+                    "banners/Shoe 2.avif",
+                    "banners/shoe 3.avif"
+                ],
+                sizes: ["7", "8", "9", "10", "11"],
+                colors: ["White", "Black", "Red"]
+            },
+            {
+                id: 102,
+                name: "Casual Shoes",
+                price: 90,
+                image: "banners/Shoe 2.avif",
+                category: "shoes",
+                description: "Perfect casual shoes for any outfit.",
+                images: [
+                    "banners/Shoe 2.avif",
+                    "banners/shoe 4.avif"
+                ],
+                sizes: ["7", "8", "9", "10", "11"],
+                colors: ["Brown", "Black", "Tan"]
+            },
+            {
+                id: 103,
+                name: "Formal Shoes",
+                price: 150,
+                image: "banners/shoe 3.avif",
+                category: "shoes",
+                description: "Elegant formal shoes for professional settings.",
+                images: [
+                    "banners/shoe 3.avif",
+                    "banners/shoe 5.avif"
+                ],
+                sizes: ["7", "8", "9", "10", "11"],
+                colors: ["Black", "Brown"]
+            },
+            {
+                id: 104,
+                name: "Running Shoes",
+                price: 110,
+                image: "banners/shoe 4.avif",
+                category: "shoes",
+                description: "High-performance running shoes for athletes.",
+                images: [
+                    "banners/shoe 4.avif",
+                    "banners/shoe 6.avif"
+                ],
+                sizes: ["7", "8", "9", "10", "11"],
+                colors: ["Blue", "Red", "Black"]
+            },
+            {
+                id: 105,
+                name: "Leather Boots",
+                price: 180,
+                image: "banners/shoe 5.avif",
+                category: "shoes",
+                description: "Durable leather boots for outdoor activities.",
+                images: [
+                    "banners/shoe 5.avif",
+                    "banners/shoe 7.avif"
+                ],
+                sizes: ["7", "8", "9", "10", "11"],
+                colors: ["Brown", "Black", "Tan"]
+            },
+            {
+                id: 106,
+                name: "Sports Shoes",
+                price: 95,
+                image: "banners/shoe 6.avif",
+                category: "shoes",
+                description: "Versatile sports shoes for various activities.",
+                images: [
+                    "banners/shoe 6.avif",
+                    "banners/shoe 8.avif"
+                ],
+                sizes: ["7", "8", "9", "10", "11"],
+                colors: ["White", "Gray", "Blue"]
+            },
+            {
+                id: 107,
+                name: "Designer Shoes",
+                price: 200,
+                image: "banners/shoe 7.avif",
+                category: "shoes",
+                description: "Exclusive designer shoes for fashion enthusiasts.",
+                images: [
+                    "banners/shoe 7.avif",
+                    "banners/shoe 9.avif"
+                ],
+                sizes: ["7", "8", "9", "10", "11"],
+                colors: ["Black", "White", "Gold"]
+            },
+            {
+                id: 108,
+                name: "Comfort Shoes",
+                price: 85,
+                image: "banners/shoe 8.avif",
+                category: "shoes",
+                description: "Ultra-comfortable shoes for long hours of wear.",
+                images: [
+                    "banners/shoe 8.avif",
+                    "banners/shoe 1.avif"
+                ],
+                sizes: ["7", "8", "9", "10", "11"],
+                colors: ["Gray", "Black", "Navy"]
+            },
+            {
+                id: 109,
+                name: "Fashion Sneakers",
+                price: 130,
+                image: "banners/shoe 9.avif",
+                category: "shoes",
+                description: "Trendy fashion sneakers for style-conscious individuals.",
+                images: [
+                    "banners/shoe 9.avif",
+                    "banners/Shoe 2.avif"
+                ],
+                sizes: ["7", "8", "9", "10", "11"],
+                colors: ["White", "Pink", "Yellow"]
+            }
+        ];
+
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        let filteredProducts = [...products];
+
+        // Initialize the shop
+        document.addEventListener('DOMContentLoaded', function() {
+            renderProducts();
+            renderFootwear();
+            updateCartDisplay();
+            initializeMobileMenu();
+            initializeSearchAndFilters();
+        });
+
+        function renderProducts() {
+            const productGrid = document.getElementById('productGrid');
+            productGrid.innerHTML = '';
+
+            filteredProducts.forEach(product => {
+                const productCard = document.createElement('div');
+                productCard.className = 'product-card';
+                productCard.innerHTML = `
+                    <img src="${product.image}" alt="${product.name}" class="product-image">
+                    <div class="product-info">
+                        <div class="product-name">${product.name}</div>
+                        <div class="product-price">$${product.price}</div>
+                        <div class="product-actions">
+                            <button class="view-details-btn" onclick="openProductModal(${product.id})">
+                                <i class="fas fa-eye"></i> View Details
+                            </button>
+                            <button class="add-to-cart-btn" onclick="addToCart(${product.id})">
+                                <i class="fas fa-shopping-cart"></i> Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                `;
+                productGrid.appendChild(productCard);
+            });
+        }
+
+        function renderFootwear() {
+            const footwearGrid = document.getElementById('footwearGrid');
+            footwearGrid.innerHTML = '';
+
+            footwearProducts.forEach(product => {
+                const footwearCard = document.createElement('div');
+                footwearCard.className = 'footwear-card';
+                footwearCard.innerHTML = `
+                    <img src="${product.image}" alt="${product.name}" class="footwear-image">
+                    <div class="footwear-info">
+                        <div>
+                            <div class="footwear-name">${product.name}</div>
+                            <div class="footwear-price">$${product.price}</div>
+                        </div>
+                        <div class="footwear-actions">
+                            <button class="footwear-view-btn" onclick="openProductModal(${product.id})">
+                                <i class="fas fa-eye"></i> View
+                            </button>
+                            <button class="footwear-cart-btn" onclick="addToCart(${product.id})">
+                                <i class="fas fa-shopping-cart"></i> Add
+                            </button>
+                        </div>
+                    </div>
+                `;
+                footwearGrid.appendChild(footwearCard);
+            });
+        }
+
+        function openProductModal(productId) {
+            // Search in both regular products and footwear products
+            let product = products.find(p => p.id === productId);
+            if (!product) {
+                product = footwearProducts.find(p => p.id === productId);
+            }
+            
+            if (!product) return;
+
+            const modalContent = document.getElementById('modalContent');
+            modalContent.innerHTML = `
+                <div class="product-images">
+                    <img src="${product.images[0]}" alt="${product.name}" class="main-image" id="mainImage">
+                    <div class="thumbnail-images">
+                        ${product.images.map((img, index) => `
+                            <img src="${img}" alt="${product.name}" class="thumbnail ${index === 0 ? 'active' : ''}" 
+                                 onclick="changeMainImage('${img}', this)">
+                        `).join('')}
+                    </div>
+                </div>
+                <div class="product-details">
+                    <h2>${product.name}</h2>
+                    <div class="price">$${product.price}</div>
+                    <div class="description">${product.description}</div>
+                    
+                    <div class="product-options">
+                        <div class="option-group">
+                            <label for="size">Size:</label>
+                            <select id="size">
+                                ${product.sizes.map(size => `<option value="${size}">${size}</option>`).join('')}
+                            </select>
+                        </div>
+                        
+                        <div class="option-group">
+                            <label for="color">Color:</label>
+                            <select id="color">
+                                ${product.colors.map(color => `<option value="${color}">${color}</option>`).join('')}
+                            </select>
+                        </div>
+                        
+                        <div class="option-group">
+                            <label>Quantity:</label>
+                            <div class="quantity-group">
+                                <button class="quantity-btn" onclick="changeQuantity(-1)">-</button>
+                                <input type="number" class="quantity-input" id="quantity" value="1" min="1" max="10">
+                                <button class="quantity-btn" onclick="changeQuantity(1)">+</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="modal-actions">
+                        <button class="add-to-cart-modal" onclick="addToCartFromModal(${product.id})">
+                            <i class="fas fa-shopping-cart"></i> Add to Cart
+                        </button>
+                        <button class="buy-now" onclick="buyNow(${product.id})">
+                            <i class="fas fa-bolt"></i> Buy Now
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('productModal').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeProductModal() {
+            document.getElementById('productModal').style.display = 'none';
+            document.body.style.overflow = '';
+        }
+
+        function changeMainImage(src, thumbnail) {
+            document.getElementById('mainImage').src = src;
+            document.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('active'));
+            thumbnail.classList.add('active');
+        }
+
+        function changeQuantity(change) {
+            const quantityInput = document.getElementById('quantity');
+            const newQuantity = parseInt(quantityInput.value) + change;
+            if (newQuantity >= 1 && newQuantity <= 10) {
+                quantityInput.value = newQuantity;
+            }
+        }
+
+        function addToCart(productId) {
+            // Search in both regular products and footwear products
+            let product = products.find(p => p.id === productId);
+            if (!product) {
+                product = footwearProducts.find(p => p.id === productId);
+            }
+            
+            if (!product) return;
+
+            const item = {
+                id: productId,
+                name: product.name,
+                price: product.price,
+                image: product.image,
+                quantity: 1
+            };
+            
+            cart.push(item);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartDisplay();
+            showNotification(`${product.name} added to cart!`);
+        }
+
+        function addToCartFromModal(productId) {
+            // Search in both regular products and footwear products
+            let product = products.find(p => p.id === productId);
+            if (!product) {
+                product = footwearProducts.find(p => p.id === productId);
+            }
+            
+            if (!product) return;
+
+            const size = document.getElementById('size').value;
+            const color = document.getElementById('color').value;
+            const quantity = parseInt(document.getElementById('quantity').value);
+
+            const item = {
+                id: productId,
+                name: product.name,
+                price: product.price,
+                image: product.image,
+                quantity: quantity,
+                size: size,
+                color: color
+            };
+            
+            cart.push(item);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartDisplay();
+            showNotification(`${product.name} added to cart!`);
+            closeProductModal();
+        }
+
+        function buyNow(productId) {
+            addToCartFromModal(productId);
+            // Redirect to cart page
+            setTimeout(() => {
+                window.location.href = 'cart.html';
+            }, 1000);
+        }
+
+        function updateCartDisplay() {
+            const cartCount = document.querySelector('.cart-count');
+            if (cartCount) {
+                cartCount.textContent = cart.length;
+            }
+        }
+
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        function initializeSearchAndFilters() {
+            const searchInput = document.getElementById('searchInput');
+            const categoryFilter = document.getElementById('categoryFilter');
+            const priceFilter = document.getElementById('priceFilter');
+
+            function filterProducts() {
+                const searchTerm = searchInput.value.toLowerCase();
+                const category = categoryFilter.value;
+                const priceRange = priceFilter.value;
+
+                filteredProducts = products.filter(product => {
+                    const matchesSearch = product.name.toLowerCase().includes(searchTerm);
+                    const matchesCategory = !category || product.category === category;
+                    const matchesPrice = !priceRange || checkPriceRange(product.price, priceRange);
+
+                    return matchesSearch && matchesCategory && matchesPrice;
+                });
+
+                renderProducts();
+            }
+
+            function checkPriceRange(price, range) {
+                switch(range) {
+                    case '0-100': return price >= 0 && price <= 100;
+                    case '100-500': return price > 100 && price <= 500;
+                    case '500+': return price > 500;
+                    default: return true;
+                }
+            }
+
+            searchInput.addEventListener('input', filterProducts);
+            categoryFilter.addEventListener('change', filterProducts);
+            priceFilter.addEventListener('change', filterProducts);
+        }
+
+        function initializeMobileMenu() {
+            const hamburger = document.querySelector('.hamburger');
+            const navMenu = document.querySelector('#navbar');
+            const closeMenu = document.querySelector('.close-menu');
+
+            hamburger.addEventListener('click', function() {
+                hamburger.classList.toggle('active');
+                navMenu.classList.toggle('active');
+                closeMenu.classList.toggle('active');
+                document.body.style.overflow = 'hidden';
+            });
+
+            closeMenu.addEventListener('click', function() {
+                hamburger.classList.remove('active');
+                navMenu.classList.remove('active');
+                closeMenu.classList.remove('active');
+                document.body.style.overflow = '';
+            });
+
+            const navLinks = document.querySelectorAll('#navbar a');
+            navLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    hamburger.classList.remove('active');
+                    navMenu.classList.remove('active');
+                    closeMenu.classList.remove('active');
+                    document.body.style.overflow = '';
+                });
+            });
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('productModal');
+            if (event.target === modal) {
+                closeProductModal();
+            }
+        }
+
+        // Update year in footer
+        document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script>AOS.init({ duration: 900, once: true });</script>
+</body>
+</html> 

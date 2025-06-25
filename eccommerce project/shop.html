@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop - Creative Ecommerce</title>
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+    <style>
+        /* Product Detail Modal Styles */
+        .product-modal {
+            display: none;
+            position: fixed;
+            z-index: 10000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            overflow-y: auto;
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 2% auto;
+            padding: 0;
+            width: 90%;
+            max-width: 1200px;
+            border-radius: 16px;
+            position: relative;
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #0db4ac;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 18px;
+            cursor: pointer;
+            z-index: 10001;
+            transition: all 0.3s ease;
+        }
+
+        .close-modal:hover {
+            background: #13ac13;
+            transform: scale(1.1);
+        }
+
+        .product-detail-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            padding: 40px;
+        }
+
+        .product-images {
+            position: relative;
+        }
+
+        .main-product-image {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .product-thumbnails {
+            display: flex;
+            gap: 10px;
+        }
+
+        .thumbnail {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .thumbnail:hover,
+        .thumbnail.active {
+            border-color: #0db4ac;
+            transform: scale(1.05);
+        }
+
+        .product-info h2 {
+            color: #333;
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .product-price {
+            font-size: 28px;
+            color: #0db4ac;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .product-description {
+            color: #6c757d;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .product-features {
+            list-style: none;
+            margin-bottom: 20px;
+        }
+
+        .product-features li {
+            padding: 8px 0;
+            color: #333;
+            border-bottom: 1px solid #eee;
+        }
+
+        .product-features li:before {
+            content: "✓";
+            color: #0db4ac;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .product-options {
+            margin-bottom: 20px;
+        }
+
+        .option-group {
+            margin-bottom: 15px;
+        }
+
+        .option-group label {
+            display: block;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .option-group select,
+        .option-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .quantity-btn {
+            background: #f0f0f0;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        .quantity-btn:hover {
+            background: #0db4ac;
+            color: white;
+        }
+
+        .quantity-input {
+            width: 80px;
+            text-align: center;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        .add-to-cart-btn {
+            background: linear-gradient(135deg, #0db4ac 0%, #13ac13 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .add-to-cart-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(13, 180, 172, 0.3);
+        }
+
+        .product-reviews {
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 1px solid #eee;
+        }
+
+        .review-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .review-stars {
+            color: #ffc107;
+            margin-bottom: 5px;
+        }
+
+        .review-text {
+            color: #333;
+            font-style: italic;
+        }
+
+        .review-author {
+            color: #6c757d;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        /* Enhanced Product Cards */
+        .product-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 32px rgba(0,0,0,0.15);
+        }
+
+        .product-card img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .product-card:hover img {
+            transform: scale(1.05);
+        }
+
+        .product-card-content {
+            padding: 20px;
+        }
+
+        .product-card h6 {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .product-card .price {
+            color: #0db4ac;
+            font-weight: 700;
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+
+        .product-card .order-btn {
+            background: linear-gradient(135deg, #0db4ac 0%, #13ac13 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .product-card .order-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .product-detail-container {
+                grid-template-columns: 1fr;
+                gap: 20px;
+                padding: 20px;
+            }
+
+            .modal-content {
+                width: 95%;
+                margin: 5% auto;
+            }
+
+            .product-thumbnails {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <section id="header" data-aos="fade-up">
+        <a href="#"><img src="banners/logo.jpeg" class="logo" alt=""></a>
+        <div>
+            <ul id="navbar">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="shop.html" class="nav-link active">Shop</a></li>
+                <li><a href="blog.html" class="nav-link">Blog</a></li>
+                <li><a href="about.html" class="nav-link">About</a></li>
+                <li><a href="contact.html" class="nav-link">Contact</a></li>
+                <li><a href="cart.html" class="nav-link"><i class="far fa-shopping-bag"></i><span class="cart-count">0</span></a></li>
+            </ul>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Close button for mobile menu -->
+    <button class="close-menu">
+        <i class="fas fa-times"></i>
+    </button>
+
+    <section id="page-header" data-aos="fade-up">
+        <h2># Stay at Home and Shop</h2>
+        <p>Save more with coupons & up to 70% off!</p>
+    </section>
+
+    <!-- Product Detail Modal -->
+    <div id="productModal" class="product-modal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeProductModal()">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="product-detail-container">
+                <div class="product-images">
+                    <img id="mainProductImage" src="" alt="Product" class="main-product-image">
+                    <div class="product-thumbnails" id="productThumbnails">
+                        <!-- Thumbnails will be populated dynamically -->
+                    </div>
+                </div>
+                <div class="product-info">
+                    <h2 id="productTitle"></h2>
+                    <div class="product-price" id="productPrice"></div>
+                    <p class="product-description" id="productDescription"></p>
+                    
+                    <ul class="product-features" id="productFeatures">
+                        <!-- Features will be populated dynamically -->
+                    </ul>
+                    
+                    <div class="product-options">
+                        <div class="option-group">
+                            <label for="productSize">Size:</label>
+                            <select id="productSize" name="size">
+                                <option value="S">Small</option>
+                                <option value="M">Medium</option>
+                                <option value="L">Large</option>
+                                <option value="XL">X-Large</option>
+                            </select>
+                        </div>
+                        
+                        <div class="option-group">
+                            <label for="productColor">Color:</label>
+                            <select id="productColor" name="color">
+                                <option value="black">Black</option>
+                                <option value="navy">Navy</option>
+                                <option value="grey">Grey</option>
+                                <option value="white">White</option>
+                            </select>
+                        </div>
+                        
+                        <div class="quantity-controls">
+                            <label>Quantity:</label>
+                            <button class="quantity-btn" onclick="changeQuantity(-1)">-</button>
+                            <input type="number" id="productQuantity" class="quantity-input" value="1" min="1" max="10">
+                            <button class="quantity-btn" onclick="changeQuantity(1)">+</button>
+                        </div>
+                    </div>
+                    
+                    <button class="add-to-cart-btn" onclick="addToCartFromModal()">
+                        <i class="fas fa-shopping-cart"></i> Add to Cart
+                    </button>
+                    
+                    <div class="product-reviews">
+                        <h4>Customer Reviews</h4>
+                        <div class="review-item">
+                            <div class="review-stars">⭐⭐⭐⭐☆</div>
+                            <div class="review-text">"Very comfortable and stylish! Perfect fit."</div>
+                            <div class="review-author">- John D.</div>
+                        </div>
+                        <div class="review-item">
+                            <div class="review-stars">⭐⭐⭐⭐⭐</div>
+                            <div class="review-text">"Great quality material and excellent service."</div>
+                            <div class="review-author">- Mary K.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Products Section -->
+    <section id="feature" class="section-p1" data-aos="fade-up">
+        <h2 style="text-align: center; margin-bottom: 40px; color: #0db4ac;">Our Products</h2>
+        
+        <!-- Clothing Products -->
+        <div class="fe-box">
+            <div class="product-card" onclick="openProductModal('Pull-Overs and Pull-Neck Clothing', 60, 'banners/premium_photo-banner 2.avif', 'Premium pull-over clothing perfect for casual wear. Made from high-quality materials for comfort and durability.')">
+                <img src="banners/premium_photo-banner 2.avif" alt="Pull-Overs">
+                <div class="product-card-content">
+                    <h6>Pull-Overs and Pull-Neck Clothing</h6>
+                    <div class="price">$60.00</div>
+                    <button class="order-btn" data-product="Pull-Overs and Pull-Neck Clothing" data-price="60">View Details</button>
+                </div>
+            </div>
+            
+            <div class="product-card" onclick="openProductModal('T-Shirts', 660, 'banners/photo-1650100178700-banner 6.avif', 'Comfortable and stylish T-shirts available in various colors and sizes. Perfect for everyday wear.')">
+                <img src="banners/photo-1650100178700-banner 6.avif" alt="T-Shirts">
+                <div class="product-card-content">
+                    <h6>T-Shirts</h6>
+                    <div class="price">$660.00</div>
+                    <button class="order-btn" data-product="T-Shirts" data-price="660">View Details</button>
+                </div>
+            </div>
+            
+            <div class="product-card" onclick="openProductModal('Ladies Tops and Jackets', 700, 'banners/blog images/premium_photo-blog 1.avif', 'Elegant ladies tops and jackets designed for style and comfort. Perfect for both casual and formal occasions.')">
+                <img src="banners/blog images/premium_photo-blog 1.avif" alt="Ladies Tops">
+                <div class="product-card-content">
+                    <h6>Ladies Tops and Jackets</h6>
+                    <div class="price">$700.00</div>
+                    <button class="order-btn" data-product="Ladies Tops and Jackets" data-price="700">View Details</button>
+                </div>
+            </div>
+            
+            <div class="product-card" onclick="openProductModal('Casual Shirts', 450, 'banners/photo-1650100178700-banner 6.avif', 'Comfortable casual shirts perfect for any occasion. Available in multiple colors and sizes.')">
+                <img src="banners/photo-1650100178700-banner 6.avif" alt="Casual Shirts">
+                <div class="product-card-content">
+                    <h6>Casual Shirts</h6>
+                    <div class="price">$450.00</div>
+                    <button class="order-btn" data-product="Casual Shirts" data-price="450">View Details</button>
+                </div>
+            </div>
+            
+            <div class="product-card" onclick="openProductModal('Formal Wear', 800, 'banners/photo-1650100178700-banner 6.avif', 'Professional formal wear for business and special occasions. Premium quality materials and perfect fit.')">
+                <img src="banners/photo-1650100178700-banner 6.avif" alt="Formal Wear">
+                <div class="product-card-content">
+                    <h6>Formal Wear</h6>
+                    <div class="price">$800.00</div>
+                    <button class="order-btn" data-product="Formal Wear" data-price="800">View Details</button>
+                </div>
+            </div>
+            
+            <div class="product-card" onclick="openProductModal('Summer Collection', 350, 'banners/photo-1650100178700-banner 6.avif', 'Light and breathable summer collection perfect for hot weather. Comfortable and stylish designs.')">
+                <img src="banners/photo-1650100178700-banner 6.avif" alt="Summer Collection">
+                <div class="product-card-content">
+                    <h6>Summer Collection</h6>
+                    <div class="price">$350.00</div>
+                    <button class="order-btn" data-product="Summer Collection" data-price="350">View Details</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Shoes Section -->
+        <h2 style="text-align: center; margin: 60px 0 40px 0; color: #0db4ac;">Footwear Collection</h2>
+        <div class="shoes">
+            <h3 style="text-align: center; margin-bottom: 40px; color: #333;">Choose from our variety of shoes for every occasion!</h3>
+            <div class="show">
+                <div class="product-card" onclick="openProductModal('Casual Sneakers', 60, 'banners/shoe 1.avif', 'Comfortable casual sneakers perfect for everyday wear. Lightweight and durable design.')">
+                    <img src="banners/shoe 1.avif" alt="Sneakers">
+                    <div class="product-card-content">
+                        <h6>Casual Sneakers</h6>
+                        <div class="price">$60.00</div>
+                        <button class="order-btn" data-product="Casual Sneakers" data-price="60">View Details</button>
+                    </div>
+                </div>
+                
+                <div class="product-card" onclick="openProductModal('Running Shoes', 80, 'banners/Shoe 2.avif', 'Professional running shoes with excellent cushioning and support for your active lifestyle.')">
+                    <img src="banners/Shoe 2.avif" alt="Running Shoes">
+                    <div class="product-card-content">
+                        <h6>Running Shoes</h6>
+                        <div class="price">$80.00</div>
+                        <button class="order-btn" data-product="Running Shoes" data-price="80">View Details</button>
+                    </div>
+                </div>
+                
+                <div class="product-card" onclick="openProductModal('Formal Shoes', 120, 'banners/shoe 3.avif', 'Elegant formal shoes perfect for business and special occasions. Premium leather construction.')">
+                    <img src="banners/shoe 3.avif" alt="Formal Shoes">
+                    <div class="product-card-content">
+                        <h6>Formal Shoes</h6>
+                        <div class="price">$120.00</div>
+                        <button class="order-btn" data-product="Formal Shoes" data-price="120">View Details</button>
+                    </div>
+                </div>
+                
+                <div class="product-card" onclick="openProductModal('Sports Shoes', 90, 'banners/shoe 4.avif', 'High-performance sports shoes designed for athletes. Excellent grip and support.')">
+                    <img src="banners/shoe 4.avif" alt="Sports Shoes">
+                    <div class="product-card-content">
+                        <h6>Sports Shoes</h6>
+                        <div class="price">$90.00</div>
+                        <button class="order-btn" data-product="Sports Shoes" data-price="90">View Details</button>
+                    </div>
+                </div>
+                
+                <div class="product-card" onclick="openProductModal('Casual Loafers', 70, 'banners/shoe 5.avif', 'Comfortable casual loafers perfect for relaxed occasions. Slip-on design for convenience.')">
+                    <img src="banners/shoe 5.avif" alt="Casual Loafers">
+                    <div class="product-card-content">
+                        <h6>Casual Loafers</h6>
+                        <div class="price">$70.00</div>
+                        <button class="order-btn" data-product="Casual Loafers" data-price="70">View Details</button>
+                    </div>
+                </div>
+                
+                <div class="product-card" onclick="openProductModal('Hiking Boots', 150, 'banners/shoe 6.avif', 'Durable hiking boots for outdoor adventures. Waterproof and comfortable for long treks.')">
+                    <img src="banners/shoe 6.avif" alt="Hiking Boots">
+                    <div class="product-card-content">
+                        <h6>Hiking Boots</h6>
+                        <div class="price">$150.00</div>
+                        <button class="order-btn" data-product="Hiking Boots" data-price="150">View Details</button>
+                    </div>
+                </div>
+                
+                <div class="product-card" onclick="openProductModal('Dress Shoes', 110, 'banners/shoe 7.avif', 'Elegant dress shoes for formal occasions. Classic design with modern comfort.')">
+                    <img src="banners/shoe 7.avif" alt="Dress Shoes">
+                    <div class="product-card-content">
+                        <h6>Dress Shoes</h6>
+                        <div class="price">$110.00</div>
+                        <button class="order-btn" data-product="Dress Shoes" data-price="110">View Details</button>
+                    </div>
+                </div>
+                
+                <div class="product-card" onclick="openProductModal('Casual Boots', 95, 'banners/shoe 8.avif', 'Stylish casual boots perfect for cooler weather. Comfortable and durable design.')">
+                    <img src="banners/shoe 8.avif" alt="Casual Boots">
+                    <div class="product-card-content">
+                        <h6>Casual Boots</h6>
+                        <div class="price">$95.00</div>
+                        <button class="order-btn" data-product="Casual Boots" data-price="95">View Details</button>
+                    </div>
+                </div>
+                
+                <div class="product-card" onclick="openProductModal('Athletic Shoes', 85, 'banners/shoe 9.avif', 'Versatile athletic shoes for various sports and activities. Lightweight and supportive.')">
+                    <img src="banners/shoe 9.avif" alt="Athletic Shoes">
+                    <div class="product-card-content">
+                        <h6>Athletic Shoes</h6>
+                        <div class="price">$85.00</div>
+                        <button class="order-btn" data-product="Athletic Shoes" data-price="85">View Details</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="pagination" class="section-p1">
+        <a href="#" class="active">1</a>
+        <a href="#">2</a>
+        <a href="#"><i class="fal fa-long-arrow-alt-right"></i></a>
+    </section>
+
+    <!-- Modern Contact Section -->
+    <section class="contact-modern-section section-p1" data-aos="fade-up" style="background: #f5f7fa; border-radius: 18px; margin-top: 40px; margin-bottom: 0; box-shadow: 0 4px 16px rgba(13,180,172,0.08);">
+        <div style="display: flex; flex-wrap: wrap; gap: 40px; justify-content: center; align-items: flex-start; padding: 40px 0 0 0;">
+            <div style="flex: 2; min-width: 260px; background: #fff; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); padding: 32px 24px; margin-bottom: 40px;">
+                <h2 style="color: #0db4ac; margin-bottom: 18px;">Send Us a Message</h2>
+                <form action="#" style="display: flex; flex-direction: column; gap: 18px;">
+                    <input type="text" placeholder="Your Name" required style="padding: 14px; border: 1px solid #cccccc; border-radius: 6px; background: #f5f7fa;">
+                    <input type="email" placeholder="Your Email" required style="padding: 14px; border: 1px solid #cccccc; border-radius: 6px; background: #f5f7fa;">
+                    <textarea rows="5" placeholder="Your Message" required style="padding: 14px; border: 1px solid #cccccc; border-radius: 6px; background: #f5f7fa;"></textarea>
+                    <button type="submit" style="padding: 14px; border: none; background-color: #0db4ac; color: white; font-size: 1rem; border-radius: 6px; cursor: pointer; font-weight: bold; transition: background 0.3s;">Send Message</button>
+                </form>
+            </div>
+            <div style="flex: 1; min-width: 220px; background: #fff; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); padding: 32px 24px; margin-bottom: 40px;">
+                <h3 style="color: #0db4ac; margin-bottom: 18px;">Contact Information</h3>
+                <p style="color: #333; margin-bottom: 12px; font-size: 16px;"><i class="fas fa-map-marker-alt"></i> Nairobi, Kenya</p>
+                <p style="color: #333; margin-bottom: 12px; font-size: 16px;"><i class="fas fa-phone"></i> +254-708-661-872</p>
+                <p style="color: #333; margin-bottom: 12px; font-size: 16px;"><i class="fas fa-envelope"></i> kamaiglen4@gmail.com</p>
+                <div class="social-icons" style="margin-top: 18px; display: flex; gap: 18px;">
+                    <a href="https://www.facebook.com/profile.php?id=100084906404154" target="_blank" style="font-size: 22px; color: #0db4ac;"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://x.com/Glennykamai?t=NCNq0hPuHuy38RDBtvrLZw&s=09" target="_blank" style="font-size: 22px; color: #0db4ac;"><i class="fab fa-twitter"></i></a>
+                    <a href="https://www.instagram.com/glennykemboi?igsh=YzljYTk1ODg3Zg==" target="_blank" style="font-size: 22px; color: #0db4ac;"><i class="fab fa-instagram"></i></a>
+                    <a href="#" style="font-size: 22px; color: #0db4ac;"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+        </div>
+        <div style="width: 100%; height: 260px; border-radius: 12px; margin: 0 auto 40px auto; box-shadow: 0 2px 8px rgba(0,0,0,0.04); background: #e0e0e0; display: flex; align-items: center; justify-content: center;">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15955.007964479836!2d36.8219466!3d-1.2920659!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x182f10d5b1b1b1b1%3A0x7d7d7d7d7d7d7d7d!2sNairobi%2C%20Kenya!5e0!3m2!1sen!2ske!4v1680000000000!5m2!1sen!2ske" width="100%" height="100%" style="border:0; border-radius: 12px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+        <footer class="footer" style="background: #0db4ac; color: #fff; text-align: center; padding: 18px 0 10px 0; font-size: 16px; border-radius: 20px 20px 0 0; margin-top: 30px;">
+            &copy; <span id="year"></span> Creative Ecommerce. All rights reserved.
+        </footer>
+        <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+    </section>
+
+    <script src="script.js"></script>
+    <script src="cart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 900, once: true });
+
+        // Product Modal Functionality
+        let currentProduct = null;
+
+        function openProductModal(productName, price, imageSrc, description) {
+            currentProduct = {
+                name: productName,
+                price: price,
+                image: imageSrc,
+                description: description
+            };
+
+            // Populate modal content
+            document.getElementById('productTitle').textContent = productName;
+            document.getElementById('productPrice').textContent = `$${price.toFixed(2)}`;
+            document.getElementById('productDescription').textContent = description;
+            document.getElementById('mainProductImage').src = imageSrc;
+
+            // Generate features based on product type
+            const features = generateProductFeatures(productName);
+            const featuresList = document.getElementById('productFeatures');
+            featuresList.innerHTML = '';
+            features.forEach(feature => {
+                const li = document.createElement('li');
+                li.textContent = feature;
+                featuresList.appendChild(li);
+            });
+
+            // Generate thumbnails
+            const thumbnails = generateProductThumbnails(imageSrc);
+            const thumbnailsContainer = document.getElementById('productThumbnails');
+            thumbnailsContainer.innerHTML = '';
+            thumbnails.forEach((thumb, index) => {
+                const img = document.createElement('img');
+                img.src = thumb;
+                img.alt = `${productName} ${index + 1}`;
+                img.className = 'thumbnail';
+                if (index === 0) img.classList.add('active');
+                img.onclick = () => {
+                    document.getElementById('mainProductImage').src = thumb;
+                    document.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('active'));
+                    img.classList.add('active');
+                };
+                thumbnailsContainer.appendChild(img);
+            });
+
+            // Show modal
+            document.getElementById('productModal').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeProductModal() {
+            document.getElementById('productModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+            currentProduct = null;
+        }
+
+        function changeQuantity(change) {
+            const quantityInput = document.getElementById('productQuantity');
+            const newQuantity = parseInt(quantityInput.value) + change;
+            if (newQuantity >= 1 && newQuantity <= 10) {
+                quantityInput.value = newQuantity;
+            }
+        }
+
+        function addToCartFromModal() {
+            if (!currentProduct) return;
+
+            const quantity = parseInt(document.getElementById('productQuantity').value);
+            const size = document.getElementById('productSize').value;
+            const color = document.getElementById('productColor').value;
+
+            // Add to cart with additional details
+            const item = {
+                id: Date.now(),
+                name: currentProduct.name,
+                price: currentProduct.price,
+                image: currentProduct.image,
+                quantity: quantity,
+                size: size,
+                color: color
+            };
+
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            cart.push(item);
+            localStorage.setItem('cart', JSON.stringify(cart));
+
+            // Update cart count
+            const cartCount = document.querySelector('.cart-count');
+            if (cartCount) {
+                cartCount.textContent = cart.length;
+            }
+
+            // Show success message
+            showNotification(`${currentProduct.name} added to cart!`);
+            closeProductModal();
+        }
+
+        function generateProductFeatures(productName) {
+            const features = {
+                'Pull-Overs and Pull-Neck Clothing': [
+                    'Material: 100% Cotton, Breathable',
+                    'Fit: Regular, Slim, Relaxed',
+                    'Available Sizes: S, M, L, XL',
+                    'Colors: Black, Navy, Grey, White',
+                    'Origin: Made in Kenya',
+                    'Warranty: 1 Year'
+                ],
+                'T-Shirts': [
+                    'Material: Premium Cotton Blend',
+                    'Fit: Comfortable Regular Fit',
+                    'Available Sizes: XS, S, M, L, XL, XXL',
+                    'Colors: Multiple Options Available',
+                    'Care: Machine Washable',
+                    'Design: Modern and Stylish'
+                ],
+                'Ladies Tops and Jackets': [
+                    'Material: High-Quality Fabric',
+                    'Fit: Flattering Design',
+                    'Available Sizes: XS, S, M, L, XL',
+                    'Colors: Elegant Color Palette',
+                    'Style: Versatile for Any Occasion',
+                    'Care: Easy Maintenance'
+                ]
+            };
+
+            return features[productName] || [
+                'High-Quality Materials',
+                'Comfortable Fit',
+                'Multiple Sizes Available',
+                'Various Color Options',
+                'Durable Construction',
+                'Easy Care Instructions'
+            ];
+        }
+
+        function generateProductThumbnails(mainImage) {
+            // Generate additional thumbnail images based on the main image
+            const baseImage = mainImage.replace('.avif', '').replace('.jpeg', '').replace('.jpg', '');
+            return [
+                mainImage,
+                mainImage.replace('.avif', '2.avif').replace('.jpeg', '2.jpeg').replace('.jpg', '2.jpg'),
+                mainImage.replace('.avif', '3.avif').replace('.jpeg', '3.jpeg').replace('.jpg', '3.jpg'),
+                mainImage.replace('.avif', '4.avif').replace('.jpeg', '4.jpeg').replace('.jpg', '4.jpg')
+            ];
+        }
+
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.textContent = message;
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: #0db4ac;
+                color: white;
+                padding: 15px 20px;
+                border-radius: 8px;
+                z-index: 10000;
+                animation: slideIn 0.3s ease;
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('productModal');
+            if (event.target === modal) {
+                closeProductModal();
+            }
+        }
+
+        // Mobile menu functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const hamburger = document.querySelector('.hamburger');
+            const navMenu = document.querySelector('#navbar');
+            const closeMenu = document.querySelector('.close-menu');
+
+            hamburger.addEventListener('click', function() {
+                hamburger.classList.toggle('active');
+                navMenu.classList.toggle('active');
+                closeMenu.classList.toggle('active');
+                document.body.style.overflow = 'hidden';
+            });
+
+            closeMenu.addEventListener('click', function() {
+                hamburger.classList.remove('active');
+                navMenu.classList.remove('active');
+                closeMenu.classList.remove('active');
+                document.body.style.overflow = '';
+            });
+
+            const navLinks = document.querySelectorAll('#navbar a');
+            navLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    hamburger.classList.remove('active');
+                    navMenu.classList.remove('active');
+                    closeMenu.classList.remove('active');
+                    document.body.style.overflow = '';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
